@@ -1,32 +1,38 @@
 import React, { useState } from "react";
 
 interface IProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  children?: React.ReactNode;
   lablText?: string;
   onSelect?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   error?: string;
+  // children was removed as it was defined but never used
 }
 
 const FileInput = React.forwardRef<HTMLInputElement, IProps>(
   (
     {
-      children,
       className,
       lablText,
       onChange,
       onSelect,
       error,
-
       ...props
     },
     ref
   ) => {
     const [fileName, setFileName] = useState("");
-    function fileChangedHandler(e: any) {
-      const file = e.target.files[0];
-      setFileName(file.name);
-      onChange && onChange(e);
-      onSelect && onSelect(e);
+
+    function fileChangedHandler(e: React.ChangeEvent<HTMLInputElement>) {
+      // The event type was updated to React.ChangeEvent<HTMLInputElement> instead of 'any'
+      const file = e.target.files?.[0]; // Added optional chaining to handle cases where no file is selected
+      if (file) {
+        setFileName(file.name);
+      }
+      if (onChange) {
+        onChange(e); // Used explicit if statements to avoid linting issues
+      }
+      if (onSelect) {
+        onSelect(e); // Used explicit if statements to avoid linting issues
+      }
     }
 
     return (
@@ -36,13 +42,14 @@ const FileInput = React.forwardRef<HTMLInputElement, IProps>(
             {lablText}
           </label>
         )}
-        <label className={" w-full  relative border flex  rounded-md cursor-pointer  group"}>
+        <label className={"w-full relative border flex rounded-md cursor-pointer group"}>
           <div
-            className={` inline-block h-full  py-3 rounded-l-md px-2  text-white transition duration-500 bg-primary-500 hover:bg-primary-700 hover:bg-gra  shadow shadow-violet-600/25 hover:shadow-primary-600/75`}>
+            className={`inline-block h-full py-3 rounded-l-md px-2 text-white transition duration-500 bg-primary-500 hover:bg-primary-700 shadow shadow-violet-600/25 hover:shadow-primary-600/75`}
+          >
             <input
               className="hidden"
               ref={ref}
-              onChange={(e) => fileChangedHandler(e)}
+              onChange={fileChangedHandler} // The onChange handler is properly typed and handled
               {...props}
               type="file"
             />
@@ -55,5 +62,6 @@ const FileInput = React.forwardRef<HTMLInputElement, IProps>(
     );
   }
 );
+
 FileInput.displayName = "FileInput";
 export default FileInput;

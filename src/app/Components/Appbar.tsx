@@ -17,18 +17,18 @@ interface Props {
 export default function Appbar({ children }: Props) {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
-  const menuItems = [
-    "Profile",
-    "Dashboard",
-    "Activity",
-    "Analytics",
-    "System",
-    "Deployments",
-    "My Settings",
-    "Team Settings",
-    "Help & Feedback",
-    "Log Out",
-  ];
+  // const menuItems = [
+  //   "Profile",
+  //   "Dashboard",
+  //   "Activity",
+  //   "Analytics",
+  //   "System",
+  //   "Deployments",
+  //   "My Settings",
+  //   "Team Settings",
+  //   "Help & Feedback",
+  //   "Log Out",
+  // ];
 
   return (
     <Navbar className="shadow-md" onMenuOpenChange={setIsMenuOpen}>

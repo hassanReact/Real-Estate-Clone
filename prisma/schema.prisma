@@ -34,6 +34,7 @@ model Property {
   status      PropertyStatus    @relation(fields: [statusId], references: [id])
   location    PropertyLocation?
   feature     PropertyFeatures?
+  images      PropertyImage[]
 }
 
 model PropertyFeatures{
@@ -59,6 +60,13 @@ model PropertyLocation{
   landmark String
   PropertyId Int @unique
   property Property @relation(fields: [PropertyId], references: [id])
+}
+
+model PropertyImage {
+  id Int @id @default(autoincrement())
+  Url String
+  property Property @relation(fields: [propertyId], references: [id])
+  propertyId Int @unique
 }
 
 model PropertyType {

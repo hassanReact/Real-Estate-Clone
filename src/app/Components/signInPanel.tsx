@@ -13,7 +13,7 @@ const SignInPanel = async () => {
         id : user?.id
       }
     })
-    return <>{dbUser!! && <UserProfilePanel user={dbUser}/> }</> 
+    return <>{dbUser && <UserProfilePanel user={dbUser}/> }</> 
   } 
   return <div className='flex gap-3'>
     <Button color='primary'>
