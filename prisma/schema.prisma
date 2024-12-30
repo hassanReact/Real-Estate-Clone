@@ -10,15 +10,15 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User{
-
-id String @id
-firsName String
-lastName String
-email String
-avatarUrl String?
-createdAt DateTime @default(now())
-Property Property[]
+model User {
+  id            String          @id
+  firstName     String
+  lastName      String
+  email         String
+  avatarUrl     String?
+  createdAt     DateTime        @default(now())
+  Property      Property[]
+  subscription Subscriptions[]
 }
 
 model Property {
@@ -33,51 +33,81 @@ model Property {
   statusId    Int
   status      PropertyStatus    @relation(fields: [statusId], references: [id])
   location    PropertyLocation?
-  feature     PropertyFeatures?
+  feature     PropertyFeature?
   images      PropertyImage[]
+  contact     Contact?
 }
 
-model PropertyFeatures{
-  id Int @id @default(autoincrement())
-  bedrooms Int
-  bathrooms Int
-  parkintSlots Int
-  area Int
-  hasSwimmingPool Boolean
-  hasGardenYard Boolean
-  hasBalcony Boolean
-  property Property @relation(fields: [propertyId], references: [id])
-  propertyId Int @unique
-}
-
-model PropertyLocation{
-  id Int @id @default(autoincrement())
-  streetAddress String
-  city String
-  state String
-  zip String
-  region String
-  landmark String
-  PropertyId Int @unique
-  property Property @relation(fields: [PropertyId], references: [id])
+model Contact {
+  id         Int      @id @default(autoincrement())
+  name       String
+  phone      String
+  email      String
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  propertyId Int      @unique
 }
 
 model PropertyImage {
-  id Int @id @default(autoincrement())
-  Url String
-  property Property @relation(fields: [propertyId], references: [id])
-  propertyId Int @unique
+  id         Int      @id @default(autoincrement())
+  url        String
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  propertyId Int
+}
+
+model PropertyFeature {
+  id              Int      @id @default(autoincrement())
+  bedrooms        Int
+  bathrooms       Int
+  parkingSpots    Int 
+  area            Int
+  hasSwimmingPool Boolean
+  hasGardenYard   Boolean
+  hasBalcony      Boolean
+  property        Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  propertyId      Int      @unique
+}
+
+model PropertyLocation {
+  id            Int      @id @default(autoincrement())
+  streetAddress String
+  city          String
+  state         String
+  zip           String
+  region        String
+  landmark      String
+  propertyId    Int      @unique
+  property      Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
 }
 
 model PropertyType {
-  id Int @id @default(autoincrement())
-  value String
+  id       Int        @id @default(autoincrement())
+  value    String
   Property Property[]
 }
 
-model PropertyStatus{
-  id Int @id @default(autoincrement())
-  value String
+model PropertyStatus {
+  id       Int        @id @default(autoincrement())
+  value    String
   Property Property[]
 }
 
+model SubscriptionPlan {
+  id Int @id @default(autoincrement())
+  name String
+  price Float
+  propertyLimit Int
+  ImagePerPropertyLimit Int
+  features String
+  subscription Subscriptions[]
+}
+
+model Subscriptions {
+  id Int @id @default(autoincrement())
+  paymentId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  plan SubscriptionPlan @relation(fields: [planId],references: [id] )
+  planId Int
+  userId String
+  user User @relation(fields: [userId], references: [id])
+}

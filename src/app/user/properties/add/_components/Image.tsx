@@ -8,6 +8,8 @@ interface Props {
     className?: string;
 }
 const Image = (props:Props) => {
+    
+ 
     const handleNext =() => props.next()
     const handlePrev = () => props.prev()
   return (

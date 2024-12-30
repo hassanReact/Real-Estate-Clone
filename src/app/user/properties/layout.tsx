@@ -3,9 +3,10 @@ import React, { ReactNode } from 'react'
 
 interface Props {
     children: ReactNode
+    modalDelete?: ReactNode
 }
 
-const PropertyLayout = ({ children }: Props) => {
+const PropertyLayout = ({ children, modalDelete }: Props) => {
     return (
         <div >
             <div className='bg-primary-400 flex  justify-between items-center p-2'>
@@ -16,6 +17,7 @@ const PropertyLayout = ({ children }: Props) => {
                 </Button>
             </div>
             {children}
+            {modalDelete}
         </div>
     )
 }

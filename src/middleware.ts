@@ -8,5 +8,5 @@ export default function middleware(req: NextRequest) {
 
 // Config to specify the matcher for the middleware
 export const config = {
-  matcher: ['/user/profile'],
+  matcher: ['/user/:path*'],
 };

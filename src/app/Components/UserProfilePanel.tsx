@@ -13,7 +13,7 @@ import Link from "next/link";
 interface Props {
   user: PrismaUser; // Use renamed type here
 }
-
+ 
 const UserProfilePanel = ({ user }: Props) => {
   return (
     <Dropdown placement="bottom-start">
@@ -25,8 +25,8 @@ const UserProfilePanel = ({ user }: Props) => {
             src: user.avatarUrl || "/Profile.jpg",
           }}
           className="transition-transform"
-          description={`@${user.firsName}`} 
-          name={`${user.firsName} ${user.lastName}`} 
+          description={`@${user.firstName}`} 
+          name={`${user.firstName} ${user.lastName}`} 
         />
       </DropdownTrigger>
 

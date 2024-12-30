@@ -4,6 +4,7 @@ import "./globals.css";
 import { Providers } from "./Components/provider";
 import Appbar from "./Components/Appbar";
 import SignInPanel from "./Components/signInPanel";
+import { ToastContainer } from "react-toastify";
 
 
 const geistSans = Geist({
@@ -36,6 +37,7 @@ export default function RootLayout({
             <SignInPanel/>
           </Appbar>
         {children}
+        <ToastContainer/>
         </Providers>
       </body>
     </html>

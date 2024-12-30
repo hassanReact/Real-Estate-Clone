@@ -30,7 +30,7 @@ export async function GET() {
     await prisma.user.create({
       data: {
         id: user.id,
-        firsName: user.given_name ?? "",  // Fallback to empty if no given name
+        firstName: user.given_name ?? "",  // Fallback to empty if no given name
         lastName: user.family_name ?? "",  // Fallback to empty if no family name
         email: user.email ?? "",           // Fallback to empty if no email
       },

@@ -1,5 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 
+
 // Function to upload multiple images to Supabase storage
 export async function uploadImages(images: File[]) {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
