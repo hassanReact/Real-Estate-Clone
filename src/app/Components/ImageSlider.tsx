@@ -1,7 +1,8 @@
-"use client"
-import { useCallback, useEffect, useState } from "react";
-import { Card } from '@nextui-org/react'
-import { AnimatePresence, motion } from 'framer-motion';
+"use client";
+import { Card, cn } from "@nextui-org/react";
+import { motion, AnimatePresence } from "framer-motion";
+import React, { useEffect, useState } from "react";
+
 export const ImagesSlider = ({
   images,
   children,
@@ -20,7 +21,6 @@ export const ImagesSlider = ({
   direction?: "up" | "down";
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [loading, setLoading] = useState(true); // Default to `true`
   const [loadedImages, setLoadedImages] = useState<string[]>([]);
 
   const handleNext = () => {
@@ -35,31 +35,26 @@ export const ImagesSlider = ({
     );
   };
 
-  const loadImages = useCallback(() => {
-    setLoading(true); // Show the loading state
-    const loadPromises = images.map((image) => {
-      return new Promise((resolve, reject) => {
-        const img = new Image();
-        img.src = image;
-        img.onload = () => resolve(image);
-        img.onerror = reject;
-      });
-    });
-
-    Promise.all(loadPromises)
-      .then((loadedImages) => {
-        setLoadedImages(loadedImages as string[]);
-        setLoading(false); // Hide the loading state
-      })
-      .catch((error) => {
-        console.error("Failed to load images", error);
-        setLoading(false); // Hide the loading state even on failure
-      });
-  }, [images]); // Dependency on `images`
-
   useEffect(() => {
+    const loadImages = () => {
+      const loadPromises = images.map((image) => {
+        return new Promise((resolve, reject) => {
+          const img = new Image();
+          img.src = image;
+          img.onload = () => resolve(image);
+          img.onerror = reject;
+        });
+      });
+
+      Promise.all(loadPromises)
+        .then((loadedImages) => {
+          setLoadedImages(loadedImages as string[]);
+        })
+        .catch((error) => console.error("Failed to load images", error));
+    };
+
     loadImages();
-  }, [loadImages]); // Add `loadImages` to dependencies
+  }, [images]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -69,23 +64,23 @@ export const ImagesSlider = ({
         handlePrevious();
       }
     };
-  
+
     window.addEventListener("keydown", handleKeyDown);
-  
-    // Autoplay
-    let interval: ReturnType<typeof setInterval> | undefined;
+
+    // autoplay
+    let interval: any;
     if (autoplay) {
       interval = setInterval(() => {
         handleNext();
       }, 5000);
     }
-  
+
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
-      if (interval) clearInterval(interval);
+      clearInterval(interval);
     };
-  }, [autoplay, handleNext, handlePrevious]); // Add the missing dependencies
-  
+  }, [autoplay]);
+
   const slideVariants = {
     initial: {
       scale: 0,
@@ -117,31 +112,24 @@ export const ImagesSlider = ({
     },
   };
 
-  const areImagesLoaded = loadedImages.length > 0;
-
   return (
     <Card
-      className={`overflow-hidden h-full w-full relative flex items-center justify-center ${className}`}
+      className={cn(
+        "overflow-hidden h-full w-full relative flex items-center justify-center",
+        className
+      )}
       style={{
         perspective: "1000px",
       }}
     >
-      {/* Show loading spinner */}
-      {loading && (
-        <div className="absolute inset-0 flex items-center justify-center z-50 bg-black/70">
-          <div className="w-12 h-12 border-4 border-t-transparent border-gray-200 rounded-full animate-spin"></div>
-        </div>
-      )}
-
-      {/* Render children only if images are loaded */}
-      {!loading && areImagesLoaded && children}
-      {!loading && areImagesLoaded && overlay && (
+      {loadedImages.length > 0 && children}
+      {loadedImages.length > 0 && overlay && (
         <div
-          className={`absolute inset-0 bg-black/60 z-40 ${overlayClassName}`}
+          className={cn("absolute inset-0 bg-black/60 z-40", overlayClassName)}
         />
       )}
 
-      {!loading && areImagesLoaded && (
+      {loadedImages.length > 0 && (
         <AnimatePresence>
           <motion.img
             key={currentIndex}
