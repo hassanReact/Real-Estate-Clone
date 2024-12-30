@@ -28,7 +28,7 @@ export default function Appbar({ children }: Props) {
         <NavbarBrand>
             <Link href={"/"} className="flex items-center text-primary-400 hover:text-primary-800 transition-colors gap-2">
             <HomeModernIcon className="w-16"/>
-          <p className="font-bold text-inherit">HK Real Estate</p>
+          <p className="font-bold text-inherit">ZYCK Real Estate</p>
             </Link>
         </NavbarBrand>
       </NavbarContent>
