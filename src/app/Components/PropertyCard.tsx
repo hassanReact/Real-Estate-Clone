@@ -26,7 +26,7 @@ interface Props {
 const PropertyCard = ({ property }: Props) => {
     return (
         <Card className='w-72 flex flex-col hover:scale-105 transition-transform duration-300' shadow='md'>
-            <Image radius="none" src={property.images[0].url} className='object-fill w-96 h-48' />
+            <Image alt='PropertyImage' radius="none" src={property.images[0].url} className='object-fill w-96 h-48' />
            <div className='flex flex-col mt-auto'>
 
             <div className='p-4'>

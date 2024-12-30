@@ -7,7 +7,7 @@ const AddPropertyPage = async () => {
     prisma.propertyType.findMany(),
     prisma.propertyStatus.findMany(),
   ]);
-  return <AddPropertyForm types={propertyTypes} statuses={propertyStatuses} />;
+  return <AddPropertyForm  types={propertyTypes} statuses={propertyStatuses} />;
 };
 
 export default AddPropertyPage;

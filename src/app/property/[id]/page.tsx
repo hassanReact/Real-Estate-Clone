@@ -2,7 +2,6 @@ import { ImagesSlider } from "@/app/Components/ImageSlider";
 import PageTitle from "@/app/Components/pageTitle"; // Ensure correct import if it's a default export
 import prisma from "@/lib/prisma";
 import { Card } from "@nextui-org/react";
-import { motion } from "framer-motion"; // Corrected framer-motion import
 
 interface Props {
   params: {

@@ -34,14 +34,14 @@ const PurchasePlan = ({ plan }: Props) => {
   return (
     <>
       <Button
-        onClick={intiatePayment}
+        onPress={intiatePayment}
         color="secondary"
         endContent={<ShoppingBagIcon className="w-4" />}
         isLoading={isLoading}
       >
         Purchase Subscription
       </Button>
-      {clientSecret!! && (
+      {clientSecret && (
         <Elements
           stripe={stripePromise}
           options={{

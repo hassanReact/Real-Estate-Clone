@@ -1,5 +1,5 @@
 import FileInput from '@/app/Components/fileUpload';
-import { Button, Card, cn, image } from '@nextui-org/react';
+import { Button, Card, cn } from '@nextui-org/react';
 import React from 'react'
 import PictureCard from './PictureCard';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/16/solid';
@@ -19,27 +19,23 @@ const Picture = (props: Props) => {
     const handlePrev = () => props.prev()
     return (
         <Card className={cn("p-3", props.className)}>
-            <FileInput onSelect={(e) => props.setImages([(e as any).target.files[0], ...props.images])} />
-            <div className='flex gap-3 flex-wrap'>
-            {props.savedImagesUrl!! && props.savedImagesUrl.map((images, index) => {
-                        return (
-                            <PictureCard key={images.id} src={images.url} index={index} onDelete={(i) => {
-                                props.setSavedImagesUrl!! && 
-                                props.setSavedImagesUrl(props.savedImagesUrl!.filter((img) => img.id !== images.id))
-                            }} />
+            <FileInput onSelect={(e: React.ChangeEvent<HTMLInputElement>) => props.setImages([...(e.target.files ? Array.from(e.target.files) : []), ...props.images])} />
+            {props.savedImagesUrl && props.savedImagesUrl.map((image, index) => {
+                return (
+                    <PictureCard
+                        key={image.id}
+                        src={image.url}
+                        index={index}
+                        onDelete={() => {
+                            if (props.setSavedImagesUrl) {
+                                props.setSavedImagesUrl(props.savedImagesUrl.filter((img) => img.id !== image.id));
+                            }
+                        }}
+                    />
+                );
+            })}
 
-                        )
-                    })}
 
-                    {props.images.map((images, index) => {
-                        const srcUrl = URL.createObjectURL(images);
-                        return (
-                            <PictureCard key={srcUrl} src={srcUrl} index={index} onDelete={(i) => props.setImages([
-                                ...props.images.slice(0, i), ...props.images.slice(i + 1)
-                            ])} />
-                        )
-                    })}
-            </div>
             <div className='mt-3 flex justify-center col-span-2 gap-3'>
                 <Button
                     onPress={handlePrev}

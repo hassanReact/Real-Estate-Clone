@@ -1,8 +1,6 @@
-"use client";
-import { Card, cn } from "@nextui-org/react";
-import { motion, AnimatePresence } from "framer-motion";
-import React, { useEffect, useState } from "react";
-
+import { useCallback, useEffect, useState } from "react";
+import { Card } from '@nextui-org/react'
+import { AnimatePresence, motion } from 'framer-motion';
 export const ImagesSlider = ({
   images,
   children,
@@ -21,7 +19,7 @@ export const ImagesSlider = ({
   direction?: "up" | "down";
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true); // Default to `true`
   const [loadedImages, setLoadedImages] = useState<string[]>([]);
 
   const handleNext = () => {
@@ -36,12 +34,8 @@ export const ImagesSlider = ({
     );
   };
 
-  useEffect(() => {
-    loadImages();
-  }, []);
-
-  const loadImages = () => {
-    setLoading(true);
+  const loadImages = useCallback(() => {
+    setLoading(true); // Show the loading state
     const loadPromises = images.map((image) => {
       return new Promise((resolve, reject) => {
         const img = new Image();
@@ -54,10 +48,18 @@ export const ImagesSlider = ({
     Promise.all(loadPromises)
       .then((loadedImages) => {
         setLoadedImages(loadedImages as string[]);
-        setLoading(false);
+        setLoading(false); // Hide the loading state
       })
-      .catch((error) => console.error("Failed to load images", error));
-  };
+      .catch((error) => {
+        console.error("Failed to load images", error);
+        setLoading(false); // Hide the loading state even on failure
+      });
+  }, [images]); // Dependency on `images`
+
+  useEffect(() => {
+    loadImages();
+  }, [loadImages]); // Add `loadImages` to dependencies
+
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "ArrowRight") {
@@ -66,23 +68,23 @@ export const ImagesSlider = ({
         handlePrevious();
       }
     };
-
+  
     window.addEventListener("keydown", handleKeyDown);
-
-    // autoplay
-    let interval: any;
+  
+    // Autoplay
+    let interval: ReturnType<typeof setInterval> | undefined;
     if (autoplay) {
       interval = setInterval(() => {
         handleNext();
       }, 5000);
     }
-
+  
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
-      clearInterval(interval);
+      if (interval) clearInterval(interval);
     };
-  }, []);
-
+  }, [autoplay, handleNext, handlePrevious]); // Add the missing dependencies
+  
   const slideVariants = {
     initial: {
       scale: 0,
@@ -118,22 +120,27 @@ export const ImagesSlider = ({
 
   return (
     <Card
-      className={cn(
-        "overflow-hidden h-full w-full relative flex items-center justify-center",
-        className
-      )}
+      className={`overflow-hidden h-full w-full relative flex items-center justify-center ${className}`}
       style={{
         perspective: "1000px",
       }}
     >
-      {areImagesLoaded && children}
-      {areImagesLoaded && overlay && (
+      {/* Show loading spinner */}
+      {loading && (
+        <div className="absolute inset-0 flex items-center justify-center z-50 bg-black/70">
+          <div className="w-12 h-12 border-4 border-t-transparent border-gray-200 rounded-full animate-spin"></div>
+        </div>
+      )}
+
+      {/* Render children only if images are loaded */}
+      {!loading && areImagesLoaded && children}
+      {!loading && areImagesLoaded && overlay && (
         <div
-          className={cn("absolute inset-0 bg-black/60 z-40", overlayClassName)}
+          className={`absolute inset-0 bg-black/60 z-40 ${overlayClassName}`}
         />
       )}
 
-      {areImagesLoaded && (
+      {!loading && areImagesLoaded && (
         <AnimatePresence>
           <motion.img
             key={currentIndex}

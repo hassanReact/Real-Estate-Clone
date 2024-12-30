@@ -14,7 +14,7 @@ import { FormProvider, useForm, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { uploadImages } from '@/lib/upload'
 import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs'
-import { redirect, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { toast } from 'react-toastify'
 import { editProperty, saveProperty } from '@/lib/actions/property'
 

@@ -29,8 +29,8 @@ const Plan = ({plan} : {plan : SubscriptionPlan}) => {
       <h1 className='text-2xl lg:text-4xl text-orange-600 font-bold text-center'>${plan.price.toString()}</h1>
       <hr />
       <div className='flex flex-col gap-1 text-center'>
-        {plan.features.split(",").map((feature) => (
-          <p className='text-slate-500 text-sm'>{feature.trim()}</p>
+        {plan.features.split(",").map((feature, index) => (
+          <p key={index} className='text-slate-500 text-sm'>{feature.trim()}</p>
         ))}
       </div>
       <PurchasePlan plan={plan}/>

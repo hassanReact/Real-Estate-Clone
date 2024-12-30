@@ -59,12 +59,12 @@ const CheckoutForm = (props: Props) => {
         <ModalBody>
           <form onSubmit={handleSubmit}>
             <PaymentElement />
-            {/* <AddressElement
+            <AddressElement
               options={{
                 mode: "shipping",
                 allowedCountries: ["US"],
               }}
-            /> */}
+            />
             <div className="flex justify-center gap-4">
               <Button
                 isDisabled={isLoading}
